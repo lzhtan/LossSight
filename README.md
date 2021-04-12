@@ -14,11 +14,11 @@ A packet loss detection and location solution based on AM-PM and INT, suitable f
 
 FindINT supports two encoding methods of Loss_Bit:
 
-**（1）SAM, Single-Bit Alternate Marking**
+（1）SAM, Single-Bit Alternate Marking
 
 For example, when the alternate period is 6, the INT Source Node marks the arriving telemetry data packets according to the rule of "0 0 0 1 1 1 0 0 0 1 1 1 ...".
 
-**（2）MCM, multi-bit cycle mark**
+（2）MCM, multi-bit cycle mark
 
 For example, when the length of Loss_Bit is 2, INT Source Node marks the arriving telemetry data packets according to the rule of "00 01 10 11 00 01 10 11 ...".
 
@@ -94,11 +94,11 @@ LossSight-GAN是基于生成对抗网络实现的带内网络遥测缺失数据�
 
 LossSight-FindINT支持两种丢包位（Loss_Bit）编码方式：
 
-**（1）SAM，单Bit交替标记**
+（1）SAM，单Bit交替标记
 
 例如，交替周期为6时，INT Source Node 按照“0 0 0 1 1 1 0 0 0 1 1 1 ...”的规律标记到达的遥测数据包。
 
-**（2）MCM，多Bit循环标记**
+（2）MCM，多Bit循环标记
 
 例如，Loss_Bit长度为2时，INT Source Node 按照“00 01 10 11 00 01 10 11 ...”的规律标记到达的遥测数据包。
 通过逐点标记，FindINT支持丢包定位。
