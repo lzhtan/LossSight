@@ -51,8 +51,8 @@ header ipv4_option_t {
 }
 
 header mri_t {
-    bit<1> loss_bit;
-    bit<15>  count;
+    bit<2> loss_bit;
+    bit<14>  count;
 }
 
 header switch_t {
@@ -65,7 +65,7 @@ struct ingress_metadata_t {
 }
 
 struct parser_metadata_t {
-    bit<15>  remaining;
+    bit<14>  remaining;
 }
 
 struct egress_metadata_t {
@@ -206,13 +206,20 @@ control MyEgress(inout headers hdr,
     action write_count(){
         bit<32> count;
         count = meta.egress_metadata.count_number;
-        if(count < 3){
-            hdr.mri.loss_bit = 1; //loss_bit 置1  （0.1.2）  
-        }else{
-            hdr.mri.loss_bit = 0; //loss_bit 置0 （3.4.5）
+        if (count == 0){ 
+             hdr.mri.loss_bit = 0 ;
+        }
+        if (count == 1){ 
+             hdr.mri.loss_bit = 1 ;
+        }
+        if (count == 2){ 
+             hdr.mri.loss_bit = 2 ;
+        }
+        if (count == 3){ 
+             hdr.mri.loss_bit = 3 ;
         }
         count = count + 1 ;
-        if (count == 6){ //记满6重置
+        if (count == 4){ //记满4重置
             count = 0 ;
         }
         loss_counter.write( 0, count ); //将count写入寄存器

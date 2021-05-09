@@ -39,8 +39,8 @@ class IPOption_MRI(IPOption):
                     FieldLenField("length", None, fmt="B",
                                   length_of="swtraces",
                                   adjust=lambda pkt,l:l*2+4),
-                    BitField("loss_bit", 0, 1),
-                    BitField("count", 0, 15),
+                    BitField("loss_bit", 0, 8),
+                    BitField("count", 0, 8),
                     PacketListField("swtraces",
                                    [],
                                    SwitchTrace,
@@ -70,7 +70,7 @@ def main():
     try:
       for i in range(int(sys.argv[3])):
         sendp(pkt, iface=iface)
-        #sleep(0.1)
+        #sleep(1)
     except KeyboardInterrupt:
         raise
 

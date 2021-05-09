@@ -7,9 +7,6 @@ const bit<16> TYPE_IPV4 = 0x800;
 const bit<5>  IPV4_OPTION_MRI = 31;
 
 
-register<bit<32>>(size = 1, initial_value = 0) loss_counter;//32位宽 100行的寄存器
-
-
 #define MAX_HOPS 9
 
 /*************************************************************************
@@ -51,8 +48,8 @@ header ipv4_option_t {
 }
 
 header mri_t {
-    bit<1> loss_bit;
-    bit<15>  count;
+    bit<8> loss_bit;
+    bit<8>  count;
 }
 
 header switch_t {
@@ -61,15 +58,15 @@ header switch_t {
 }
 
 struct ingress_metadata_t {
-    bit<16>  count;
+    bit<8>  count;
 }
 
 struct parser_metadata_t {
-    bit<15>  remaining;
+    bit<8>  remaining;
 }
 
 struct egress_metadata_t {
-    bit<32>  count_number;
+    bit<8>  count_number;
 }
 
 struct metadata {
@@ -200,24 +197,6 @@ control MyIngress(inout headers hdr,
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
-    action read_count(){       
-        loss_counter.read(meta.egress_metadata.count_number , 0); //读取index0 寄存器的值到meta中。
-    }
-    action write_count(){
-        bit<32> count;
-        count = meta.egress_metadata.count_number;
-        if(count < 3){
-            hdr.mri.loss_bit = 1; //loss_bit 置1  （0.1.2）  
-        }else{
-            hdr.mri.loss_bit = 0; //loss_bit 置0 （3.4.5）
-        }
-        count = count + 1 ;
-        if (count == 6){ //记满6重置
-            count = 0 ;
-        }
-        loss_counter.write( 0, count ); //将count写入寄存器
-    }
-
     action add_swtrace(switchID_t swid) { 
         hdr.mri.count = hdr.mri.count + 1;
         hdr.swtraces.push_front(1);
@@ -234,20 +213,6 @@ control MyEgress(inout headers hdr,
 	hdr.ipv4.totalLen = hdr.ipv4.totalLen + 8;
     }
 
-    table read {
-        actions = { 
-	    read_count; 
-	    NoAction; 
-        }
-        default_action = NoAction();      
-    }
-    table write {
-        actions = { 
-	    write_count; 
-	    NoAction; 
-        }
-        default_action = NoAction();      
-    }
 
     table swtrace {
         actions = { 
@@ -258,10 +223,6 @@ control MyEgress(inout headers hdr,
     }
     
     apply {
-        @atomic{ //将读和写增加为原子操作
-        read.apply();
-        write.apply();
-        }
         if (hdr.mri.isValid()) {
             swtrace.apply();
         }

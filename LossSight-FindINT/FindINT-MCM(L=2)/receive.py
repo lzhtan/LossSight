@@ -11,6 +11,7 @@ from scapy.layers.inet import _IPOption_HDR
 Total_Loss = 0.0
 Total_Packet = 0.0
 Total_Lost_Packet = 0.0
+Total_Loss_Bit = 0
 
 def get_if():
     ifs=get_if_list()
@@ -37,8 +38,8 @@ class IPOption_INT(IPOption):
                     FieldLenField("length", None, fmt="B",
                                   length_of="swtraces",
                                   adjust=lambda pkt,l:l*2+4),
-                    BitField("loss_bit", 0, 1),
-                    BitField("count", 0, 15),
+                    BitField("loss_bit", 0, 2),
+                    BitField("count", 0, 14),
                     PacketListField("swtraces",
                                    [],
                                    SwitchTrace,
@@ -48,26 +49,23 @@ def handle_pkt(pkt):
     global Total_Loss
     global Total_Packet
     global Total_Lost_Packet
-
-    Total_Packet = Total_Packet + 1
+    global Total_Loss_Bit
 
     #print "got a packet"
-   # pkt.show2()
-    loss_bit = str(IPOption_INT(str(pkt[IP].options)))[76]
-    if (Total_Packet % 6 < 3):
-        if (int(loss_bit) != 1):
-            Total_Packet = Total_Packet + 1
-            Total_Lost_Packet = Total_Lost_Packet + 1
-            print(Total_Packet)
-            #print(Total_Lost_Packet)
-            print(Total_Lost_Packet/Total_Packet)
-    if (Total_Packet % 6 > 3):
-        if (int(loss_bit) != 0):
-            Total_Packet = Total_Packet + 1
-            Total_Lost_Packet = Total_Lost_Packet + 1
-            print(Total_Packet)
-            #print(Total_Lost_Packet)
-            print(Total_Lost_Packet/Total_Packet)
+    #pkt.show2()
+    loss_bit = str(IPOption_INT(str(pkt[IP].options)))[76:77]
+    #print(Total_Packet)
+    if (int(loss_bit) != Total_Loss_Bit):
+        Total_Packet = Total_Packet + 1
+        Total_Lost_Packet = Total_Lost_Packet + 1
+        Total_Loss_Bit = Total_Loss_Bit + 2
+        #print(Total_Lost_Packet)
+        print(Total_Lost_Packet/Total_Packet)
+    else:
+        Total_Packet = Total_Packet + 1
+        Total_Loss_Bit = Total_Loss_Bit + 1
+    if ( Total_Loss_Bit > 3):
+        Total_Loss_Bit = 0
 
     sys.stdout.flush()
 

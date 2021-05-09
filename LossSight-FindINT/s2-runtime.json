@@ -1,7 +1,7 @@
 {
   "target": "bmv2",
-  "p4info": "build/FindINT.p4.p4info.txt",
-  "bmv2_json": "build/FindINT.json",
+  "p4info": "build/FindINTs2.p4.p4info.txt",
+  "bmv2_json": "build/FindINTs2.json",
   "table_entries": [
     {
       "table": "MyEgress.swtrace",
