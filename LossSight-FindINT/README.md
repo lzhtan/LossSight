@@ -64,6 +64,9 @@ And successfully pinged.
 
 9. The packet loss rate measurement result is observed in H2.
 
+The current version only announces packet loss detection. If you need to locate the packet loss, you need to have two lossbits in the packet, s1 fills lossbit[0], and s2 fills lossbit[1].
+
+
 # 中文简介
 
 **LossSight-FindINT**
@@ -132,3 +135,4 @@ LossSight-FindINT支持两种丢包位（Loss_Bit）编码方式：
 
 9.在H2中观察到丢包率测量结果。
 
+目前的版本只公布了检测丢包。如果你需要定位丢包，那么需要在packet中有两个lossbit，s1填充lossbit[0],s2填充lossbit[1]即可。
