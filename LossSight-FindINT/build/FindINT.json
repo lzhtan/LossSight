@@ -7,8 +7,9 @@
         ["tmp", 1, false],
         ["tmp_0", 32, false],
         ["metadata._ingress_metadata_count0", 16, false],
-        ["metadata._parser_metadata_remaining1", 15, false],
-        ["metadata._egress_metadata_count_number2", 32, false]
+        ["metadata._parser_metadata_remaining1", 12, false],
+        ["metadata._egress_metadata_count_number2", 32, false],
+        ["_padding_0", 3, false]
       ]
     },
     {
@@ -80,8 +81,9 @@
       "name" : "mri_t",
       "id" : 5,
       "fields" : [
-        ["loss_bit", 1, false],
-        ["count", 15, false]
+        ["loss_bit1", 2, false],
+        ["loss_bit2", 2, false],
+        ["count", 12, false]
       ]
     },
     {
@@ -467,13 +469,13 @@
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x7fff"
+                            "value" : "0x0fff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0x7fff"
+                        "value" : "0x0fff"
                       }
                     }
                   }
@@ -512,7 +514,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "FindINT.p4",
-        "line" : 299,
+        "line" : 301,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -541,7 +543,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "FindINT.p4",
-        "line" : 277,
+        "line" : 279,
         "column" : 1,
         "source_fragment" : "update_checksum( ..."
       },
@@ -617,7 +619,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 166,
+            "line" : 167,
             "column" : 8,
             "source_fragment" : "mark_to_drop(standard_metadata)"
           }
@@ -652,7 +654,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 170,
+            "line" : 171,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
           }
@@ -671,7 +673,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 171,
+            "line" : 172,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.srcAddr = hdr.ethernet.dstAddr"
           }
@@ -690,7 +692,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 172,
+            "line" : 173,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.dstAddr = dstAddr"
           }
@@ -732,7 +734,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 173,
+            "line" : 174,
             "column" : 8,
             "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
           }
@@ -746,21 +748,14 @@
       "primitives" : []
     },
     {
-      "name" : "NoAction",
+      "name" : "MyEgress.add_swtrace",
       "id" : 4,
-      "runtime_data" : [],
-      "primitives" : []
-    },
-    {
-      "name" : "NoAction",
-      "id" : 5,
-      "runtime_data" : [],
-      "primitives" : []
-    },
-    {
-      "name" : "MyEgress.read_count",
-      "id" : 6,
-      "runtime_data" : [],
+      "runtime_data" : [
+        {
+          "name" : "swid",
+          "bitwidth" : 32
+        }
+      ],
       "primitives" : [
         {
           "op" : "register_read",
@@ -780,62 +775,9 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 204,
+            "line" : 206,
             "column" : 8,
-            "source_fragment" : "loss_counter.read(meta.egress_metadata.count_number , 0)"
-          }
-        }
-      ]
-    },
-    {
-      "name" : "MyEgress.write_count",
-      "id" : 7,
-      "runtime_data" : [],
-      "primitives" : [
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["mri", "loss_bit"]
-            },
-            {
-              "type" : "expression",
-              "value" : {
-                "type" : "expression",
-                "value" : {
-                  "op" : "?",
-                  "left" : {
-                    "type" : "hexstr",
-                    "value" : "0x01"
-                  },
-                  "right" : {
-                    "type" : "field",
-                    "value" : ["mri", "loss_bit"]
-                  },
-                  "cond" : {
-                    "type" : "expression",
-                    "value" : {
-                      "op" : "<",
-                      "left" : {
-                        "type" : "field",
-                        "value" : ["scalars", "metadata._egress_metadata_count_number2"]
-                      },
-                      "right" : {
-                        "type" : "hexstr",
-                        "value" : "0x00000003"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "source_info" : {
-            "filename" : "FindINT.p4",
-            "line" : 210,
-            "column" : 12,
-            "source_fragment" : "hdr.mri.loss_bit ="
+            "source_fragment" : "loss_counter.read(meta.egress_metadata.count_number, 0)"
           }
         },
         {
@@ -843,7 +785,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["mri", "loss_bit"]
+              "value" : ["mri", "loss_bit1"]
             },
             {
               "type" : "expression",
@@ -857,17 +799,228 @@
                   },
                   "right" : {
                     "type" : "field",
-                    "value" : ["mri", "loss_bit"]
+                    "value" : ["mri", "loss_bit1"]
                   },
                   "cond" : {
                     "type" : "expression",
                     "value" : {
-                      "op" : "not",
-                      "left" : null,
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000001"
+                          }
+                        }
+                      },
                       "right" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : "<",
+                          "op" : "==",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "metadata._egress_metadata_count_number2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000000"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "FindINT.p4",
+            "line" : 210,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit1 ="
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["mri", "loss_bit1"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x01"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["mri", "loss_bit1"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000001"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "metadata._egress_metadata_count_number2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000001"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "FindINT.p4",
+            "line" : 213,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit1 ="
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["mri", "loss_bit1"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x02"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["mri", "loss_bit1"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000001"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "metadata._egress_metadata_count_number2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000002"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "FindINT.p4",
+            "line" : 216,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit1 ="
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["mri", "loss_bit1"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x03"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["mri", "loss_bit1"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000001"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
                           "left" : {
                             "type" : "field",
                             "value" : ["scalars", "metadata._egress_metadata_count_number2"]
@@ -886,9 +1039,273 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 212,
-            "column" : 12,
-            "source_fragment" : "hdr.mri.loss_bit ="
+            "line" : 219,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit1 ="
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["mri", "loss_bit2"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["mri", "loss_bit2"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000002"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "metadata._egress_metadata_count_number2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000000"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "FindINT.p4",
+            "line" : 224,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit2 ="
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["mri", "loss_bit2"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x01"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["mri", "loss_bit2"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000002"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "metadata._egress_metadata_count_number2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000001"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "FindINT.p4",
+            "line" : 227,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit2 ="
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["mri", "loss_bit2"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x02"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["mri", "loss_bit2"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000002"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "metadata._egress_metadata_count_number2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000002"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "FindINT.p4",
+            "line" : 230,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit2 ="
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["mri", "loss_bit2"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x03"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["mri", "loss_bit2"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "and",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "local",
+                            "value" : 0
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000002"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "==",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "metadata._egress_metadata_count_number2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000003"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "FindINT.p4",
+            "line" : 233,
+            "column" : 16,
+            "source_fragment" : "hdr.mri.loss_bit2 ="
           }
         },
         {
@@ -962,7 +1379,7 @@
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0x00000006"
+                        "value" : "0x00000004"
                       }
                     }
                   }
@@ -972,7 +1389,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 216,
+            "line" : 238,
             "column" : 12,
             "source_fragment" : "count"
           }
@@ -995,23 +1412,11 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 218,
+            "line" : 240,
             "column" : 8,
-            "source_fragment" : "loss_counter.write( 0, count )"
+            "source_fragment" : "loss_counter.write(0, count)"
           }
-        }
-      ]
-    },
-    {
-      "name" : "MyEgress.add_swtrace",
-      "id" : 8,
-      "runtime_data" : [
-        {
-          "name" : "swid",
-          "bitwidth" : 32
-        }
-      ],
-      "primitives" : [
+        },
         {
           "op" : "assign",
           "parameters" : [
@@ -1041,7 +1446,7 @@
                   },
                   "right" : {
                     "type" : "hexstr",
-                    "value" : "0x7fff"
+                    "value" : "0x0fff"
                   }
                 }
               }
@@ -1049,7 +1454,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 222,
+            "line" : 241,
             "column" : 8,
             "source_fragment" : "hdr.mri.count = hdr.mri.count + 1"
           }
@@ -1068,7 +1473,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 223,
+            "line" : 242,
             "column" : 8,
             "source_fragment" : "hdr.swtraces.push_front(1)"
           }
@@ -1083,7 +1488,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 228,
+            "line" : 247,
             "column" : 8,
             "source_fragment" : "hdr.swtraces[0].setValid()"
           }
@@ -1102,7 +1507,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 229,
+            "line" : 248,
             "column" : 8,
             "source_fragment" : "hdr.swtraces[0].swid = swid"
           }
@@ -1134,7 +1539,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 230,
+            "line" : 249,
             "column" : 8,
             "source_fragment" : "hdr.swtraces[0].qdepth = (qdepth_t)standard_metadata.deq_qdepth"
           }
@@ -1176,7 +1581,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 232,
+            "line" : 251,
             "column" : 8,
             "source_fragment" : "hdr.ipv4.ihl = hdr.ipv4.ihl + 2"
           }
@@ -1218,7 +1623,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 233,
+            "line" : 252,
             "column" : 8,
             "source_fragment" : "hdr.ipv4_option.optionLength = hdr.ipv4_option.optionLength + 8"
           }
@@ -1260,7 +1665,7 @@
           ],
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 234,
+            "line" : 253,
             "column" : 1,
             "source_fragment" : "hdr.ipv4.totalLen = hdr.ipv4.totalLen + 8"
           }
@@ -1274,7 +1679,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "FindINT.p4",
-        "line" : 162,
+        "line" : 163,
         "column" : 8,
         "source_fragment" : "MyIngress"
       },
@@ -1285,7 +1690,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 176,
+            "line" : 177,
             "column" : 10,
             "source_fragment" : "ipv4_lpm"
           },
@@ -1326,7 +1731,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 190,
+            "line" : 191,
             "column" : 12,
             "source_fragment" : "hdr.ipv4.isValid()"
           },
@@ -1351,78 +1756,18 @@
       "id" : 1,
       "source_info" : {
         "filename" : "FindINT.p4",
-        "line" : 200,
+        "line" : 201,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
-      "init_table" : "MyEgress.read",
+      "init_table" : "node_6",
       "tables" : [
         {
-          "name" : "MyEgress.read",
+          "name" : "MyEgress.swtrace",
           "id" : 1,
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 237,
-            "column" : 10,
-            "source_fragment" : "read"
-          },
-          "key" : [],
-          "match_type" : "exact",
-          "type" : "simple",
-          "max_size" : 1024,
-          "with_counters" : false,
-          "support_timeout" : false,
-          "direct_meters" : null,
-          "action_ids" : [6, 3],
-          "actions" : ["MyEgress.read_count", "NoAction"],
-          "base_default_next" : "MyEgress.write",
-          "next_tables" : {
-            "MyEgress.read_count" : "MyEgress.write",
-            "NoAction" : "MyEgress.write"
-          },
-          "default_entry" : {
-            "action_id" : 3,
-            "action_const" : false,
-            "action_data" : [],
-            "action_entry_const" : false
-          }
-        },
-        {
-          "name" : "MyEgress.write",
-          "id" : 2,
-          "source_info" : {
-            "filename" : "FindINT.p4",
-            "line" : 244,
-            "column" : 10,
-            "source_fragment" : "write"
-          },
-          "key" : [],
-          "match_type" : "exact",
-          "type" : "simple",
-          "max_size" : 1024,
-          "with_counters" : false,
-          "support_timeout" : false,
-          "direct_meters" : null,
-          "action_ids" : [7, 4],
-          "actions" : ["MyEgress.write_count", "NoAction"],
-          "base_default_next" : "node_8",
-          "next_tables" : {
-            "MyEgress.write_count" : "node_8",
-            "NoAction" : "node_8"
-          },
-          "default_entry" : {
-            "action_id" : 4,
-            "action_const" : false,
-            "action_data" : [],
-            "action_entry_const" : false
-          }
-        },
-        {
-          "name" : "MyEgress.swtrace",
-          "id" : 3,
-          "source_info" : {
-            "filename" : "FindINT.p4",
-            "line" : 252,
+            "line" : 258,
             "column" : 10,
             "source_fragment" : "swtrace"
           },
@@ -1433,7 +1778,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [8, 5],
+          "action_ids" : [4, 3],
           "actions" : ["MyEgress.add_swtrace", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
@@ -1441,7 +1786,7 @@
             "NoAction" : null
           },
           "default_entry" : {
-            "action_id" : 5,
+            "action_id" : 3,
             "action_const" : false,
             "action_data" : [],
             "action_entry_const" : false
@@ -1451,11 +1796,11 @@
       "action_profiles" : [],
       "conditionals" : [
         {
-          "name" : "node_8",
+          "name" : "node_6",
           "id" : 1,
           "source_info" : {
             "filename" : "FindINT.p4",
-            "line" : 265,
+            "line" : 267,
             "column" : 12,
             "source_fragment" : "hdr.mri.isValid()"
           },
@@ -1482,7 +1827,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "FindINT.p4",
-        "line" : 277,
+        "line" : 279,
         "column" : 1,
         "source_fragment" : "update_checksum( ..."
       },

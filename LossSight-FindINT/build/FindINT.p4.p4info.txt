@@ -26,34 +26,6 @@ tables {
 }
 tables {
   preamble {
-    id: 33581331
-    name: "MyEgress.read"
-    alias: "read"
-  }
-  action_refs {
-    id: 16818350
-  }
-  action_refs {
-    id: 16800567
-  }
-  size: 1024
-}
-tables {
-  preamble {
-    id: 33567324
-    name: "MyEgress.write"
-    alias: "write"
-  }
-  action_refs {
-    id: 16778242
-  }
-  action_refs {
-    id: 16800567
-  }
-  size: 1024
-}
-tables {
-  preamble {
     id: 33608327
     name: "MyEgress.swtrace"
     alias: "swtrace"
@@ -95,20 +67,6 @@ actions {
     id: 2
     name: "port"
     bitwidth: 9
-  }
-}
-actions {
-  preamble {
-    id: 16818350
-    name: "MyEgress.read_count"
-    alias: "read_count"
-  }
-}
-actions {
-  preamble {
-    id: 16778242
-    name: "MyEgress.write_count"
-    alias: "write_count"
   }
 }
 actions {

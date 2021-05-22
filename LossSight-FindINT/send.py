@@ -39,8 +39,9 @@ class IPOption_MRI(IPOption):
                     FieldLenField("length", None, fmt="B",
                                   length_of="swtraces",
                                   adjust=lambda pkt,l:l*2+4),
-                    BitField("loss_bit", 0, 1),
-                    BitField("count", 0, 15),
+                    BitField("loss_bit1", 0, 2),
+		    BitField("loss_bit2", 0, 2),
+                    BitField("count", 0, 12),
                     PacketListField("swtraces",
                                    [],
                                    SwitchTrace,
@@ -50,7 +51,7 @@ class IPOption_MRI(IPOption):
 def main():
 
     if len(sys.argv)<3:
-        print 'pass 2 arguments: <destination> "<message>"'
+        #print 'pass 2 arguments: <destination> "<message>"'
         exit(1)
 
     addr = socket.gethostbyname(sys.argv[1])
@@ -61,16 +62,12 @@ def main():
             swtraces=[])) / UDP(
             dport=4321, sport=1234) / sys.argv[2]
 
- #   pkt = Ether(src=get_if_hwaddr(iface), dst="ff:ff:ff:ff:ff:ff") / IP(
- #       dst=addr, options = IPOption_MRI(count=2,
- #           swtraces=[SwitchTrace(swid=0,qdepth=0), SwitchTrace(swid=1,qdepth=0)])) / UDP(
- #           dport=4321, sport=1234) / sys.argv[2]
     #pkt.show2()
-    #hexdump(pkt)
+
     try:
       for i in range(int(sys.argv[3])):
         sendp(pkt, iface=iface)
-        #sleep(0.1)
+        sleep(0.1)
     except KeyboardInterrupt:
         raise
 
