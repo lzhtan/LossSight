@@ -1,5 +1,7 @@
 # LossSight
 
+LossSight is a complete system for in-band network telemetry packet loss detection, localization, diagnosis and recovery.
+
 LossSight-FindINT is LossSight based on Mininet+P4.
 
 LossSight-DataSet is a partial telemetry result data set.
