@@ -10,7 +10,7 @@
 
 Demo Video: https://www.bilibili.com/video/BV1CV411j7AX/   https://www.bilibili.com/video/BV1yv411t7G1
 
-***LossSight-FindINT**
+**#1 LossSight-FindINT**
 
 A packet loss detection and location solution based on AM-PM and INT, suitable for Mininet environment, written in P4 language.
 
@@ -72,7 +72,7 @@ And successfully pinged.
 
 9. The packet loss rate measurement result is observed in H2.
 
-**LossSight-DataSet**
+**#2 LossSight-DataSet**
 
 A dataset on in-band network telemetry packet loss, tracking the long-term statistical results of two edge switches in Fat-Tree Network, including random loss (0.1%, 0.5%, and 1% three different random packet loss probabilities), congestion loss and blackhole loss.
 
@@ -80,7 +80,7 @@ Most file contains 100,000 pieces of INT Telemetry data. However, due to packet 
 
 The file format of each line is:[INT Report TimeStamp] [Loss Bit] [SwitchID #1] [Qdepth #1] [SwitchID #2] [Qdepth #2]
 
-**LossSight-GAN**
+**#3 LossSight-GAN**
 
     $ python3 LossSight_GAN.py --data_name LossSight --batch_size 128 --hint_rate 0.9 --alpha 100 --iterations 10000
 
@@ -92,7 +92,7 @@ LossSight-DataSet为部分遥测结果数据集。
 
 LossSight-GAN是基于生成对抗网络实现的带内网络遥测缺失数据补全组件。
 
-**LossSight-FindINT**
+**#1 LossSight-FindINT**
 
 LossSight-FindINT支持两种丢包位（Loss_Bit）编码方式：
 
@@ -154,7 +154,7 @@ LossSight-FindINT支持两种丢包位（Loss_Bit）编码方式：
 
 9.在H2中观察到丢包率测量结果。
 
-**LossSight-DataSet**
+**#2 LossSight-DataSet**
 
 一个带内网络遥测丢包数据集，在Fat-Tree网络中跟踪两个边缘交换机的长时间的统计结果，包含随机缺失（0.1%、0.5%、1%多种不同的随机丢包概率）、拥塞缺失、黑洞缺失等多种丢包类型。
 
@@ -162,7 +162,7 @@ LossSight-FindINT支持两种丢包位（Loss_Bit）编码方式：
 
 每行的文件格式为：[INT Report时间戳] [Loss Bit] [SwitchID #1] [队列长度 #1] [SwitchID #2] [队列长度 #2]
 
-**LossSight-GAN**
+**#3 LossSight-GAN**
 
     $ python3 LossSight_GAN.py --data_name LossSight --batch_size 128 --hint_rate 0.9 --alpha 100 --iterations 10000
 
