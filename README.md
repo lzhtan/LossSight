@@ -52,7 +52,7 @@ The effect is as follows:
      * write() writes the state of the register array at the specified
      * index, with the value provided by the value parameter.
      
-3. Unzip FindINT into the exercises folder and enter FindINT.
+3. Unzip LossSight into the exercises folder and enter FindINT.
 4. Execute Make in the terminal.
 5. Test
      h1 ping h2
@@ -132,7 +132,9 @@ LossSight-FindINT支持两种丢包位（Loss_Bit）编码方式：
      * index, with the value provided by the value parameter.
 
 
-3.将FindINT解压到exercises文件夹中，并进入FindINT。
+3.将LossSight解压到exercises文件夹中，并进入FindINT。
+
+     git clone https://github.com/lzhtan/LossSight
 
 4.在终端中执行Make。
 
