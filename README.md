@@ -6,7 +6,7 @@ LossSight-DataSet is a partial telemetry result data set.
 
 LossSight-GAN is a missing data completion component for in-band network telemetry based on a generative adversarial network.
 
-Demo Video: https://www.bilibili.com/video/BV1yv411t7G1
+Demo Video: https://www.bilibili.com/video/BV1CV411j7AX/ https://www.bilibili.com/video/BV1yv411t7G1
 
 **LossSight-FindINT**
 
