@@ -2,13 +2,13 @@
 
 LossSight is a complete system for in-band network telemetry packet loss detection, localization, diagnosis and recovery.
 
-LossSight-FindINT is LossSight based on Mininet+P4.
+（1）LossSight-FindINT is LossSight based on Mininet+P4.
 
-LossSight-DataSet is a partial telemetry result data set.
+（2）LossSight-DataSet is a partial telemetry result data set.
 
-LossSight-GAN is a missing data completion component for in-band network telemetry based on a generative adversarial network.
+（3）LossSight-GAN is a missing data completion component for in-band network telemetry based on a generative adversarial network.
 
-Demo Video: https://www.bilibili.com/video/BV1CV411j7AX/ https://www.bilibili.com/video/BV1yv411t7G1
+Demo Video: https://www.bilibili.com/video/BV1CV411j7AX/   https://www.bilibili.com/video/BV1yv411t7G1
 
 **LossSight-FindINT**
 
