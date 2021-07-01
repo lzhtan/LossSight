@@ -42,7 +42,7 @@ Add a line before this line:
 
      register(bit<32> size, T initial_value);
 
-The effect is as follows:
+The result is as follows:
 
      *              ignored by the caller.
      */
@@ -52,7 +52,7 @@ The effect is as follows:
      * write() writes the state of the register array at the specified
      * index, with the value provided by the value parameter.
      
-3. Unzip LossSight into the exercises folder and enter FindINT.
+3. Unzip LossSight into the exercises folder and enter LossSight-FindINT.
 4. Execute Make in the terminal.
 5. Test
      h1 ping h2
